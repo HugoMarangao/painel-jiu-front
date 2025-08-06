@@ -1,4 +1,5 @@
 'use client'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast, ToastContainer } from 'react-toastify'
@@ -11,29 +12,34 @@ export default function NovaAulaPage() {
   const [form, setForm] = useState({ titulo: '', data: '', instrutorId: '' })
   const [instrutores, setInstrutores] = useState<any[]>([])
 
-  const tenantId = localStorage.getItem('tenant_id')
-  api.get('/instrutores')
-    .then(res => {
-      const filtrados = res.data.filter((instrutor: any) => instrutor.tenantId === tenantId)
-      setInstrutores(filtrados)
-    })
-    .catch(() => toast.error('Erro ao carregar instrutores'))
+  useEffect(() => {
+    const tenantId = localStorage.getItem('tenant_id')
+    if (!tenantId) return
+
+    api
+      .get('/instrutores')
+      .then(res => {
+        const filtrados = res.data.filter((instrutor: any) => instrutor.tenantId === tenantId)
+        setInstrutores(filtrados)
+      })
+      .catch(() => toast.error('Erro ao carregar instrutores'))
+  }, [])
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('access_token')
     const tenantId = localStorage.getItem('tenant_id')
+
     if (!form.titulo || !form.data || !form.instrutorId) {
       toast.error('Preencha todos os campos!')
       return
     }
 
-    // Converter para formato ISO (Prisma DateTime)
     const isoData = new Date(form.data).toISOString()
 
     try {
       await api.post('/aulas', {
         ...form,
-        data: isoData, // importante garantir o formato ISO
+        data: isoData,
       })
 
       toast.success('Aula cadastrada com sucesso!')

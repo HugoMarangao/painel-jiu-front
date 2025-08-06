@@ -63,6 +63,8 @@ export default function EditarInstrutorPage() {
     }
   }
 
+  const fields = ['nome', 'email', 'telefone', 'faixa', 'especialidades'] as const
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-hidden">
       <ToastContainer />
@@ -86,7 +88,7 @@ export default function EditarInstrutorPage() {
       >
         <h1 className="text-3xl font-extrabold mb-6 text-center">Editar Instrutor</h1>
         <div className="grid gap-4">
-          {['nome', 'email', 'telefone', 'faixa', 'especialidades'].map((field) => (
+          {fields.map((field) => (
             <motion.input
               key={field}
               placeholder={field.charAt(0).toUpperCase() + field.slice(1)}

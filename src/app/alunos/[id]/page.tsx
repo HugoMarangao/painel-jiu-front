@@ -26,6 +26,8 @@ export default function EditarAluno() {
     }
   }
 
+  const fields = ['nome', 'email', 'faixaAtual', 'telefone', 'observacoes'] as const
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-hidden">
       <ToastContainer />
@@ -50,13 +52,15 @@ export default function EditarAluno() {
       >
         <h1 className="text-3xl font-extrabold mb-6 text-center">Editar Aluno</h1>
         <div className="grid gap-4">
-          {['nome', 'email', 'faixaAtual', 'telefone', 'observacoes'].map(field => (
+          {fields.map((field) => (
             <motion.input
               key={field}
               placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
               className="border p-3 rounded bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-red-500"
               value={form[field]}
-              onChange={e => setForm({ ...form, [field]: e.target.value })}
+              onChange={e =>
+                setForm({ ...form, [field]: e.target.value })
+              }
               whileFocus={{ scale: 1.05 }}
             />
           ))}
